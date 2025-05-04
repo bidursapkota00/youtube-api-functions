@@ -32,7 +32,11 @@ export const createUser = functions.auth.user().onCreate(async (user) => {
   const userInfo = {
     uid: user.uid,
     email: user.email || null,
+    fullName: user.displayName || null,
     photoUrl: user.photoURL || null,
+    emailVerified: user.emailVerified || false,
+    disabled: false,
+    role: "student",
     createdAt: new Date().toISOString(),
   };
 
