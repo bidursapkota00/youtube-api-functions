@@ -1,11 +1,12 @@
 // src/services/storage.service.ts
-import { storage, rawVideoBucketName } from "../config/firebase";
+import { storage } from "../../config/firebase";
 
 export const generateSignedUrl = async (
   userId: string,
-  fileExtension: string
+  fileExtension: string,
+  bucketName: string
 ): Promise<{ url: string; fileName: string }> => {
-  const bucket = storage.bucket(rawVideoBucketName);
+  const bucket = storage.bucket(bucketName);
 
   // Generate a unique filename
   const fileName = `${userId}-${Date.now()}.${fileExtension}`;

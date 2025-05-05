@@ -1,4 +1,4 @@
-// src/models/user.model.ts
+import { UserRecord } from "firebase-admin/auth";
 
 export interface User {
   uid: string;
@@ -7,11 +7,11 @@ export interface User {
   photoUrl: string | null;
   emailVerified: boolean;
   disabled: boolean;
-  role: string;
+  role: "student" | "owner";
   createdAt: string;
 }
 
-export const createUserObject = (user: any): User => {
+export const createUserObject = (user: UserRecord): User => {
   return {
     uid: user.uid,
     email: user.email || null,

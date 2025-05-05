@@ -2,11 +2,10 @@
 import { onCall } from "firebase-functions/v2/https";
 import * as functions from "firebase-functions/v1";
 import { generateSignedUrl } from "../services/storage/storage.service";
-import { getVideosFromFirestore } from "../services/firestore/getVideosFromFirestore";
 import { isOwner } from "../services/firestore/user.service";
-import { rawVideoBucketName } from "../config/firebase";
+import { codeFilesBucketName } from "../config/firebase";
 
-export const generateUploadUrl = onCall(
+export const generateCodeFileUploadUrl = onCall(
   { maxInstances: 1 },
   async (request) => {
     // Check if the user is authenticated
@@ -27,10 +26,6 @@ export const generateUploadUrl = onCall(
       );
     }
 
-    return generateSignedUrl(auth.uid, data.fileExtension, rawVideoBucketName);
+    return generateSignedUrl(auth.uid, data.fileExtension, codeFilesBucketName);
   }
 );
-
-export const getVideos = onCall({ maxInstances: 1 }, async () => {
-  return getVideosFromFirestore();
-});

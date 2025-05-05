@@ -11,5 +11,12 @@ export const firestore = getFirestore("codeyalaya");
 export const storage = new Storage();
 
 // Constants
+// Buckets
 export const rawVideoBucketName = "codeyalaya-yt-raw-videos";
+export const courseThumbnailsBucketName = "codeyalaya-course-thumbnails";
+export const codeFilesBucketName = "codeyalaya-code-files";
+// Firestore Collections
+export const userCollectionId = "users";
+export const courseCollectionId = "courses";
+export const chapterCollectionId = "chapters";
 export const videoCollectionId = "videos";

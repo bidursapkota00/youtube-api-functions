@@ -2,7 +2,7 @@
 import * as functions from "firebase-functions/v1";
 import * as logger from "firebase-functions/logger";
 import { createUserObject } from "../models/user.model";
-import { createUserInFirestore } from "../services/firestore.service";
+import { createUserInFirestore } from "../services/firestore/user.service";
 
 export const onUserCreate = functions.auth.user().onCreate(async (user) => {
   if (!user || !user.uid) {
