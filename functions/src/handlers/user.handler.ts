@@ -1,15 +1,19 @@
-// src/handlers/auth.handler.ts
-import * as functions from "firebase-functions/v1";
-import * as logger from "firebase-functions/logger";
+import { HttpsError } from "firebase-functions/v2/https";
+import { auth } from "firebase-functions/v1";
+import { logger } from "firebase-functions/v2";
 import { createUserObject } from "../models/user.model";
 import { createUserInFirestore } from "../services/firestore/user.service";
 
-export const onUserCreate = functions.auth.user().onCreate(async (user) => {
-  if (!user || !user.uid) {
-    logger.error("Invalid user data received");
-    return;
-  }
+export const onUserCreate = auth.user().onCreate(async (user) => {
+  try {
+    if (!user || !user.uid)
+      throw new HttpsError("invalid-argument", "user data is required");
 
-  const userInfo = createUserObject(user);
-  return createUserInFirestore(userInfo);
+    const userInfo = createUserObject(user);
+    return await createUserInFirestore(userInfo);
+  } catch (error) {
+    logger.error("Error creating user in firestore:", error);
+    if (error instanceof HttpsError) throw error;
+    throw new HttpsError("internal", "Failed to create user in firestore");
+  }
 });

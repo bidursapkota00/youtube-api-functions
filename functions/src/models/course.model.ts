@@ -23,3 +23,13 @@ export const createCourseObject = (course: any): Course => {
     updatedAt: now,
   };
 };
+
+export const validateCourseDataFromAPI = (data: any): string | null => {
+  if (!data) return "Course data is required";
+  if (!data.title) return "Course title is required";
+  if (!data.description) return "Course description is required";
+  if (!data.thumbnailUrl) return "Thumbnail url is required";
+  if (!data.hours) return "Hours is required";
+  if (!data.level) return "Course difficulty Level is required";
+  return null;
+};

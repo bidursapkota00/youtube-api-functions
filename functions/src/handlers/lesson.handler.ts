@@ -9,12 +9,7 @@ import {
 
 export const createLesson = onCall({ maxInstances: 1 }, async (request) => {
   try {
-    const authResult = await checkAuthAndOwner(request);
-    if (!authResult.success)
-      throw new HttpsError(
-        authResult.errorCode || "permission-denied",
-        authResult.error || "Failed Checking authentication"
-      );
+    await checkAuthAndOwner(request);
 
     const uid = request.auth!.uid;
     const lessonData = request.data;
@@ -26,21 +21,10 @@ export const createLesson = onCall({ maxInstances: 1 }, async (request) => {
 
     const lesson = createLessonObject(lessonData);
 
-    const result = await createLessonInFirestore(lesson, uid);
-
-    if (!result.success) {
-      throw new HttpsError(
-        result.errorCode || "internal",
-        result.error || "Failed to create lesson"
-      );
-    }
-
-    return result;
+    return await createLessonInFirestore(lesson, uid);
   } catch (error) {
     logger.error("Error in createLesson:", error);
-    if (error instanceof HttpsError) {
-      throw error;
-    }
+    if (error instanceof HttpsError) throw error;
     throw new HttpsError(
       "internal",
       "An internal error occurred while creating the lesson."

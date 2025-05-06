@@ -1,31 +1,32 @@
 // src/handlers/video.handler.ts
-import { onCall } from "firebase-functions/v2/https";
-import * as functions from "firebase-functions/v1";
+import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { logger } from "firebase-functions/v2";
 import { generateSignedUrl } from "../services/storage/storage.service";
-import { isOwner } from "../services/firestore/user.service";
+import { checkAuthAndOwner } from "../services/firestore/user.service";
 import { codeFilesBucketName } from "../config/firebase";
 
 export const generateCodeFileUploadUrl = onCall(
   { maxInstances: 1 },
   async (request) => {
-    // Check if the user is authenticated
-    if (!request.auth) {
-      throw new functions.https.HttpsError(
-        "failed-precondition",
-        "The function must be called while authenticated."
+    try {
+      await checkAuthAndOwner(request);
+
+      const uid = request.auth!.uid;
+      const data = request.data;
+
+      if (!data || !String(data.fileExtension).trim()) {
+        throw new HttpsError("invalid-argument", "fileExtension is required");
+      }
+
+      return await generateSignedUrl(
+        uid,
+        data.fileExtension,
+        codeFilesBucketName
       );
+    } catch (error) {
+      logger.error("Error creating file upload url:", error);
+      if (error instanceof HttpsError) throw error;
+      throw new HttpsError("internal", "Failed to create file upload url");
     }
-
-    const auth = request.auth;
-    const data = request.data;
-
-    if (!(await isOwner(auth.uid))) {
-      throw new functions.https.HttpsError(
-        "permission-denied",
-        "Only owners can upload videos."
-      );
-    }
-
-    return generateSignedUrl(auth.uid, data.fileExtension, codeFilesBucketName);
   }
 );

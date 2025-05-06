@@ -2,28 +2,29 @@ import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { logger } from "firebase-functions/v2";
 import { checkAuthAndOwner } from "../services/firestore/user.service";
 import { createChapterInFirestore } from "../services/firestore/chapter.service";
-import { createChapterObject } from "../models/chapter.model";
+import {
+  createChapterObject,
+  validateChapterDataFromAPI,
+} from "../models/chapter.model";
 
 export const createChapter = onCall({ maxInstances: 1 }, async (request) => {
   try {
-    const result = await checkAuthAndOwner(request);
-    if (!result.success)
-      throw new HttpsError(
-        result.errorCode || "permission-denied",
-        result.error || "Failed Checking authentication"
-      );
+    await checkAuthAndOwner(request);
 
     const uid = request.auth!.uid;
     const chapterData = request.data;
 
+    const validationError = validateChapterDataFromAPI(chapterData);
+    if (validationError) {
+      throw new HttpsError("invalid-argument", validationError);
+    }
+
     const chapter = createChapterObject(chapterData);
 
-    return createChapterInFirestore(chapter, uid);
+    return await createChapterInFirestore(chapter, uid);
   } catch (error) {
     logger.error("Error creating chapter:", error);
-    if (error instanceof HttpsError) {
-      throw error;
-    }
+    if (error instanceof HttpsError) throw error;
     throw new HttpsError("internal", "Failed to create chapter");
   }
 });

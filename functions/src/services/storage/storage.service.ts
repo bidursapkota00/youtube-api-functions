@@ -8,10 +8,8 @@ export const generateSignedUrl = async (
 ): Promise<{ url: string; fileName: string }> => {
   const bucket = storage.bucket(bucketName);
 
-  // Generate a unique filename
   const fileName = `${userId}-${Date.now()}.${fileExtension}`;
 
-  // Get a v4 signed URL for uploading file
   const [url] = await bucket.file(fileName).getSignedUrl({
     version: "v4",
     action: "write",

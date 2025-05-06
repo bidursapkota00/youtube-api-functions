@@ -23,3 +23,12 @@ export const createChapterObject = (chapter: any): Chapter => {
     updatedAt: now,
   };
 };
+
+export const validateChapterDataFromAPI = (data: any): string | null => {
+  if (!data) return "Chapter data is required";
+  if (!data.title) return "Chapter title is required";
+  if (!data.description) return "Chapter description is required";
+  if (!data.order) return "Chapter order is required";
+  if (!data.courseId) return "Course ID is required";
+  return null;
+};
