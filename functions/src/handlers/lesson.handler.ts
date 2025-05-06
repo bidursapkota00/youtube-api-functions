@@ -15,9 +15,8 @@ export const createLesson = onCall({ maxInstances: 1 }, async (request) => {
     const lessonData = request.data;
 
     const validationError = validateLessonDataFromAPI(lessonData);
-    if (validationError) {
+    if (validationError)
       throw new HttpsError("invalid-argument", validationError);
-    }
 
     const lesson = createLessonObject(lessonData);
 

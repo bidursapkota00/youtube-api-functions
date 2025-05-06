@@ -14,9 +14,8 @@ export const generateCodeFileUploadUrl = onCall(
       const uid = request.auth!.uid;
       const data = request.data;
 
-      if (!data || !String(data.fileExtension).trim()) {
+      if (!data || !String(data.fileExtension).trim())
         throw new HttpsError("invalid-argument", "fileExtension is required");
-      }
 
       return await generateSignedUrl(
         uid,

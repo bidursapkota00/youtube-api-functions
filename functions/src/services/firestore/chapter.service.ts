@@ -9,7 +9,7 @@ import { HttpsError } from "firebase-functions/v2/https";
 
 export const createChapterInFirestore = async (
   chapter: Chapter,
-  uid: String
+  uid: string
 ): Promise<{ success: true; chapterId: string }> => {
   const courseRef = firestore
     .collection(courseCollectionId)

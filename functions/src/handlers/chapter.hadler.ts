@@ -15,9 +15,8 @@ export const createChapter = onCall({ maxInstances: 1 }, async (request) => {
     const chapterData = request.data;
 
     const validationError = validateChapterDataFromAPI(chapterData);
-    if (validationError) {
+    if (validationError)
       throw new HttpsError("invalid-argument", validationError);
-    }
 
     const chapter = createChapterObject(chapterData);
 

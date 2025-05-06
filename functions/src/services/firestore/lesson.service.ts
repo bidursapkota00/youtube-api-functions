@@ -11,7 +11,7 @@ import { Lesson } from "../../models/lesson.model";
 
 export const createLessonInFirestore = async (
   lesson: Lesson,
-  uid: String
+  uid: string
 ): Promise<{ success: true; lessonId: string }> => {
   const chapterRef = firestore
     .collection(chapterCollectionId)
