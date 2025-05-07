@@ -17,8 +17,8 @@ export const createChapterObject = (chapter: any): Chapter => {
     title: chapter.title,
     description: chapter.description,
     order: chapter.order,
-    starterCodeUrl: chapter.starterCodeUrl,
-    finalCodeUrl: chapter.finalCodeUrl,
+    starterCodeUrl: chapter.starterCodeUrl || "",
+    finalCodeUrl: chapter.finalCodeUrl || "",
     createdAt: now,
     updatedAt: now,
   };

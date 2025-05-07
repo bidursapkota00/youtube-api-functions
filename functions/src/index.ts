@@ -9,9 +9,11 @@ import {
 } from "./handlers/course.hadler";
 import { createChapter } from "./handlers/chapter.hadler";
 import { createLesson } from "./handlers/lesson.handler";
+import { isOwner } from "./handlers/user.handler";
 
 // Auth functions
 export const createUser = onUserCreate;
+export { isOwner };
 
 // Video functions
 export { generateUploadUrl, getVideos };

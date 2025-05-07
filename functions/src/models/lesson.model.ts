@@ -8,7 +8,7 @@ export interface Lesson {
   duration: number; // in seconds
   order: number;
   status: "processing" | "processed";
-  url?: string;
+  url?: string; // ???
   createdAt: string;
   updatedAt: string;
 }
@@ -17,7 +17,7 @@ export const createLessonObject = (lesson: any): Lesson => {
   const now = new Date().toISOString();
   return {
     chapterId: lesson.chapterId,
-    courseId: lesson.courseId,
+    courseId: lesson.courseId || "",
     title: lesson.title,
     description: lesson.description,
     filename: lesson.filename,
@@ -37,6 +37,5 @@ export const validateLessonDataFromAPI = (data: any): string | null => {
   if (!data.duration) return "Lesson duration is required";
   if (!data.order) return "Lesson order is required";
   if (!data.chapterId) return "Chapter ID is required";
-  if (!data.courseId) return "Course ID is required";
   return null;
 };
