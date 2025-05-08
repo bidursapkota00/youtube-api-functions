@@ -9,9 +9,8 @@ import {
 
 export const createChapter = onCall({ maxInstances: 1 }, async (request) => {
   try {
-    await checkAuthAndOwner(request);
+    const { uid } = await checkAuthAndOwner(request);
 
-    const uid = request.auth!.uid;
     const chapterData = request.data;
 
     const validationError = validateChapterDataFromAPI(chapterData);

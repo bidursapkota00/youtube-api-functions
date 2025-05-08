@@ -1,6 +1,6 @@
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { logger } from "firebase-functions/v2";
-import { generateSignedUrl } from "../services/storage/storage.service";
+import { generateUploadSignedUrl } from "../services/storage/storage.service";
 import { getVideosFromFirestore } from "../services/firestore/getVideosFromFirestore";
 import { checkAuthAndOwner } from "../services/firestore/user.service";
 import { rawVideoBucketName } from "../config/firebase";
@@ -9,15 +9,14 @@ export const generateUploadUrl = onCall(
   { maxInstances: 1 },
   async (request) => {
     try {
-      await checkAuthAndOwner(request);
+      const { uid } = await checkAuthAndOwner(request);
 
-      const uid = request.auth!.uid;
       const data = request.data;
 
       if (!data || !String(data.fileExtension).trim())
         throw new HttpsError("invalid-argument", "fileExtension is required");
 
-      return await generateSignedUrl(
+      return await generateUploadSignedUrl(
         uid,
         data.fileExtension,
         rawVideoBucketName

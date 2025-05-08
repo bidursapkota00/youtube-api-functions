@@ -1,3 +1,9 @@
+import {
+  firestore,
+  courseCollectionId,
+  chapterCollectionId,
+  videoCollectionId,
+} from "../config/firebase";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { logger } from "firebase-functions/v2";
 import { checkAuthAndOwner } from "../services/firestore/user.service";
@@ -7,12 +13,12 @@ import {
   createCourseObject,
   validateCourseDataFromAPI,
 } from "../models/course.model";
+import { Chapter } from "../models/chapter.model";
+import { Lesson } from "../models/lesson.model";
 
 export const createCourse = onCall({ maxInstances: 1 }, async (request) => {
   try {
-    await checkAuthAndOwner(request);
-
-    const uid = request.auth!.uid;
+    const { uid } = await checkAuthAndOwner(request);
     const courseData = request.data;
 
     const validationError = validateCourseDataFromAPI(courseData);
@@ -28,15 +34,6 @@ export const createCourse = onCall({ maxInstances: 1 }, async (request) => {
     throw new HttpsError("internal", "Failed to create course");
   }
 });
-
-import {
-  firestore,
-  courseCollectionId,
-  chapterCollectionId,
-  videoCollectionId,
-} from "../config/firebase";
-import { Chapter } from "../models/chapter.model";
-import { Lesson } from "../models/lesson.model";
 
 export const getCourses = onCall({ maxInstances: 1 }, async (request) => {
   try {
@@ -57,12 +54,6 @@ export const getCourses = onCall({ maxInstances: 1 }, async (request) => {
 export const getCourseWithContent = onCall(
   { maxInstances: 1 },
   async (request) => {
-    if (!request.auth)
-      throw new HttpsError(
-        "unauthenticated",
-        "The function must be called while authenticated."
-      );
-
     const courseId = request.data.courseId;
 
     try {

@@ -18,7 +18,7 @@ export const createCourseObject = (course: any): Course => {
     thumbnailUrl: course.thumbnailUrl,
     hours: course.hours,
     level: course.level,
-    createdBy: course.uid,
+    createdBy: course.createdBy,
     createdAt: now,
     updatedAt: now,
   };

@@ -9,9 +9,8 @@ import {
 
 export const createLesson = onCall({ maxInstances: 1 }, async (request) => {
   try {
-    await checkAuthAndOwner(request);
+    const { uid } = await checkAuthAndOwner(request);
 
-    const uid = request.auth!.uid;
     const lessonData = request.data;
 
     const validationError = validateLessonDataFromAPI(lessonData);

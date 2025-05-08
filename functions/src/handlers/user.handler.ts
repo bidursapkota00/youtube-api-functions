@@ -25,8 +25,8 @@ export const isOwner = onCall({ maxInstances: 1 }, async (request) => {
   try {
     return await checkAuthAndOwner(request);
   } catch (error) {
-    logger.error("Error creating course:", error);
+    logger.error("Error in authentication:", error);
     if (error instanceof HttpsError) throw error;
-    throw new HttpsError("internal", "Failed to create course");
+    throw new HttpsError("internal", "Failed to do auth check");
   }
 });

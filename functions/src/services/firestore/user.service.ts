@@ -20,7 +20,7 @@ export const createUserInFirestore = async (
  */
 export async function checkAuthAndOwner(
   request: CallableRequest
-): Promise<true> {
+): Promise<{ uid: string; success: true }> {
   if (!request.auth)
     throw new HttpsError(
       "unauthenticated",
@@ -34,5 +34,5 @@ export async function checkAuthAndOwner(
   const userData = userDoc.data() as User;
   if (userData.role !== "owner")
     throw new HttpsError("permission-denied", "User is not an owner");
-  return true;
+  return { uid, success: true };
 }
