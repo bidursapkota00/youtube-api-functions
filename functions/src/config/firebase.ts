@@ -19,4 +19,5 @@ export const codeFilesBucketName = "codeyalaya-code-files";
 export const userCollectionId = "users";
 export const courseCollectionId = "courses";
 export const chapterCollectionId = "chapters";
+export const lessonCollectionId = "lessons";
 export const videoCollectionId = "videos";

@@ -3,7 +3,7 @@ import {
   firestore,
   chapterCollectionId,
   courseCollectionId,
-  videoCollectionId,
+  lessonCollectionId,
 } from "../../config/firebase";
 import { Chapter } from "../../models/chapter.model";
 import { Course } from "../../models/course.model";
@@ -37,7 +37,7 @@ export const createLessonInFirestore = async (
       "You can only add lessons to your own courses."
     );
 
-  const lessonRef = await firestore.collection(videoCollectionId).add(lesson);
+  const lessonRef = await firestore.collection(lessonCollectionId).add(lesson);
   await lessonRef.update({ id: lessonRef.id });
 
   return {
